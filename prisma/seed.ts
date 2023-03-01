@@ -1,8 +1,40 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TicketStatus } from "@prisma/client";
 import dayjs from "dayjs";
+
+import * as factory from "./factory";
+
 const prisma = new PrismaClient();
 
 async function main() {
+  await factory.cleanDb();
+
+  let user = await prisma.user.findUnique({
+    where: {
+      email: "programmer@gmail.com",
+    },
+  });
+
+  if (!user) {
+    user = await factory.createUser({
+      email: "programmer@gmail.com",
+      password: "123456",
+    });
+  }
+  console.log("🌱 user with email <programmer@gmail.com> created!");
+
+  const enrollment = await factory.createEnrollmentWithAddress(user);
+  console.log("🌱 user enrollment created!");
+
+  const ticketType = await factory.createTicketTypeWithHotel();
+  console.log("🌱 ticket type created!");
+
+  const ticket = await factory.createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+  console.log("🌱 user ticket paid created!");
+
+  // create payment
+  await factory.createPayment(ticket.id, ticketType.price);
+  console.log("🌱 user payment created!");
+
   let event = await prisma.event.findFirst();
   if (!event) {
     event = await prisma.event.create({
@@ -15,8 +47,10 @@ async function main() {
       },
     });
   }
+  console.log("🌱 event Driven.t created!");
 
-  console.log({ event });
+  await factory.createHotels(user);
+  console.log("🌱 hotels with rooms created!");
 }
 
 main()

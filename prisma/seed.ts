@@ -25,8 +25,17 @@ async function main() {
   const enrollment = await factory.createEnrollmentWithAddress(user);
   console.log("🌱 user enrollment created!");
 
-  const ticketType = await factory.createTicketTypeWithHotel();
-  console.log("🌱 ticket type created!");
+  await factory.createTicketTypeRemote();
+  console.log("🌱 remote ticket type created!");
+
+  await factory.createTicketTypeWithoutTheHotel();
+  console.log("🌱 presential without hotel ticket type created!");
+
+  const ticketType = await factory.createTicketTypeWithTheHotel();
+  console.log("🌱 presential with hotel ticket type created!");
+
+  /* const ticketType = await factory.createTicketTypeWithHotel();
+  console.log("🌱 ticket type created!");*/
 
   const ticket = await factory.createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
   console.log("🌱 user ticket paid created!");

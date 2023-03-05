@@ -137,6 +137,39 @@ export async function createEnrollmentWithAddress(user?: User) {
     },
   });
 }
+export async function createTicketTypeRemote() {
+  return prisma.ticketType.create({
+    data: {
+      id: 1,
+      name: 'Remote Ticket',
+      price: 400,
+      isRemote: true,
+      includesHotel: false,
+    },
+  });
+}
+export async function createTicketTypeWithoutTheHotel() {
+  return prisma.ticketType.create({
+    data: {
+      id: 2, 
+      name: 'Presencial Without Hotel Ticket',
+      price: 600,
+      isRemote: false,
+      includesHotel: false,
+    },
+  });
+}
+export async function createTicketTypeWithTheHotel() {
+  return prisma.ticketType.create({
+    data: {
+      id:3,
+      name: 'Presencial With Hotel Ticket',
+      price: 1400,
+      isRemote: false,
+      includesHotel: true,
+    },
+  });
+}
 export async function createTicketTypeWithHotel() {
   return prisma.ticketType.create({
     data: {

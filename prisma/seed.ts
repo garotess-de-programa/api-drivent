@@ -20,7 +20,23 @@ async function main() {
       password: "123456",
     });
   }
+
   console.log("🌱 user with email <programmer@gmail.com> created!");
+
+  let user2 = await prisma.user.findUnique({
+    where: {
+      email: "user2@gmail.com",
+    },
+  });
+
+  if (!user2) {
+    user = await factory.createUser({
+      email: "user2@gmail.com",
+      password: "123456",
+    });
+  }
+
+  console.log("🌱 user with email <user2@gmail.com> created!");
 
   const enrollment = await factory.createEnrollmentWithAddress(user);
   console.log("🌱 user enrollment created!");
@@ -33,9 +49,6 @@ async function main() {
 
   const ticketType = await factory.createTicketTypeWithTheHotel();
   console.log("🌱 presential with hotel ticket type created!");
-
-  /* const ticketType = await factory.createTicketTypeWithHotel();
-  console.log("🌱 ticket type created!");*/
 
   const ticket = await factory.createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
   console.log("🌱 user ticket paid created!");
@@ -58,7 +71,7 @@ async function main() {
   }
   console.log("🌱 event Driven.t created!");
 
-  await factory.createHotels(user);
+  await factory.createHotels(user, user2);
   console.log("🌱 hotels with rooms created!");
 }
 

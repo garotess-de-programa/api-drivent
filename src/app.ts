@@ -23,6 +23,8 @@ app
   .use("/payments", r.paymentsRouter)
   .use("/hotels", r.hotelsRouter)
   .use("/booking", r.bookingRouter)
+  .use("/activities", r.activityRouter)
+  .use("/schedules", r.schedulesRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {

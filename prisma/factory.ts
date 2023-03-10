@@ -5,7 +5,7 @@ import { generateCPF, getStates } from "@brazilian-utils/brazilian-utils";
 
 const prisma = new PrismaClient();
 
-export async function createHotels(user: User) {
+export async function createHotels(user: User, user2: User) {
   const rooms = [
     {
       name: faker.commerce.productName(),
@@ -13,13 +13,13 @@ export async function createHotels(user: User) {
       Booking: {
         create: [
           {
-            userId: 1339,
+            userId: user2.id,
           },
           {
-            userId: 1340,
+            userId: user2.id,
           },
           {
-            userId: 1341,
+            userId: user2.id,
           },
         ],
       },
@@ -30,10 +30,10 @@ export async function createHotels(user: User) {
       Booking: {
         create: [
           {
-            userId: 1339,
+            userId: user2.id,
           },
           {
-            userId: 1338,
+            userId: user2.id,
           },
         ],
       },
@@ -53,7 +53,7 @@ export async function createHotels(user: User) {
       Booking: {
         create: [
           {
-            userId: 1338,
+            userId: user2.id,
           },
           {
             userId: user.id,
@@ -137,6 +137,7 @@ export async function createEnrollmentWithAddress(user?: User) {
     },
   });
 }
+
 export async function createTicketTypeRemote() {
   return prisma.ticketType.create({
     data: {
@@ -151,7 +152,7 @@ export async function createTicketTypeRemote() {
 export async function createTicketTypeWithoutTheHotel() {
   return prisma.ticketType.create({
     data: {
-      id: 2, 
+      id: 2,
       name: 'Presencial Without Hotel Ticket',
       price: 600,
       isRemote: false,
@@ -211,3 +212,4 @@ export async function cleanDb() {
   await prisma.room.deleteMany({});
   await prisma.hotel.deleteMany({});
 }
+

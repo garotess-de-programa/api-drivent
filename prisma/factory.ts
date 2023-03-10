@@ -212,3 +212,4 @@ export async function cleanDb() {
   await prisma.room.deleteMany({});
   await prisma.hotel.deleteMany({});
 }
+

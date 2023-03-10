@@ -11,9 +11,9 @@ export async function getEnrollmentByUser(req: AuthenticatedRequest, res: Respon
 
     return res.status(httpStatus.OK).send(enrollmentWithAddress);
   } catch (error) {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    return res.status(httpStatus.NOT_FOUND);
   }
-}
+} 
 
 export async function postCreateOrUpdateEnrollment(req: AuthenticatedRequest, res: Response) {
   try {

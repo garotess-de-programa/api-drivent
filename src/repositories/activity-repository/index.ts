@@ -14,21 +14,20 @@ async function findActivities() {
   });
 }
 
-async function findActivitiesWithDateFilter(date: string) {
+async function findActivitiesWithDateFilter(startDate: Date, endDate: Date) {
   return prisma.activity.findMany({
     where: {
       Schedule: {
-        startTime: new Date(date),
+        startTime: {
+          gte: startDate,
+          lt: endDate,
+        },
       },
     },
     include: {
       Schedule: true,
       Hall: true,
-      Seat: {
-        select: {
-          userId: true,
-        },
-      },
+      Seat: true,
     },
   });
 }

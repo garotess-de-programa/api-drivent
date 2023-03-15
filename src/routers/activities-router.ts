@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { authenticateToken } from "@/middlewares";
-// import { } from "@/controllers";
+import { getActivities } from "@/controllers";
 
 const activityRouter = Router();
 
 activityRouter
   .all("/*", authenticateToken)
-  .get("/", () => "get activities || use query to filter activities in day")
+  .get("/", getActivities)
   .post("/reserve-seat", () => "post a seat by userId and activityId");
 
 export { activityRouter };

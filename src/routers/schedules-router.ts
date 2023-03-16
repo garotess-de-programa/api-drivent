@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { authenticateToken } from "@/middlewares";
-// import { } from "@/controllers";
+import { getActivitiesDays } from "@/controllers";
 
 const schedulesRouter = Router();
 
-schedulesRouter.all("/*", authenticateToken).get("/days", () => "get days that have activity");
+schedulesRouter.all("/*", authenticateToken).get("/days", getActivitiesDays);
 
 export { schedulesRouter };

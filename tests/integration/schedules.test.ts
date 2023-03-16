@@ -117,5 +117,19 @@ describe("GET /schedules/days", () => {
         },
       ]);
     });
+
+    it("should respond with status 204 and a empty list", async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const enrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createTicketTypeWithHotel();
+      const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+
+      await createPayment(ticket.id, ticketType.price);
+
+      const response = await server.get("/schedules/days").set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toEqual(httpStatus.NO_CONTENT);
+    });
   });
 });

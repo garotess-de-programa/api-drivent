@@ -20,8 +20,21 @@ async function getActivities(userId: number, dateFilter: string | undefined) {
   return activities;
 }
 
+async function createReserveInActivity(userId: number, activityId: number) {
+  const userAlreadyHaveInActivity = await activityRepository.findActivityWithUserIdSeat(userId, activityId);
+  if (userAlreadyHaveInActivity) throw new Error("Already have a seat in activity");
+
+  const activity = await activityRepository.findActivityById(activityId);
+  const availableSeats = await activityRepository.getCountOfSeatInActivity(activityId);
+
+  if (activity.Hall.capacity <= availableSeats._count.id) throw new Error("No available seats in this activity");
+
+  await activityRepository.reserveActivity(userId, activityId);
+}
+
 const activityService = {
   getActivities,
+  createReserveInActivity,
 };
 
 export default activityService;

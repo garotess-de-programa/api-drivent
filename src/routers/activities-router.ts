@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { authenticateToken } from "@/middlewares";
-import { getActivities } from "@/controllers";
+import { authenticateToken, validateBody } from "@/middlewares";
+import { getActivities, postReserveInActivity } from "@/controllers";
+import { createActivitySchema } from "@/schemas/activities-schemas";
 
 const activityRouter = Router();
 
 activityRouter
   .all("/*", authenticateToken)
   .get("/", getActivities)
-  .post("/reserve-seat", () => "post a seat by userId and activityId");
+  .post("/", validateBody(createActivitySchema), postReserveInActivity);
 
 export { activityRouter };

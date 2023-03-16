@@ -1,7 +1,5 @@
-import { cannotListActivitiesError, notFoundError } from "@/errors";
+import { verifyTicketInformations } from "@/helpers/verifyTicketInformations-helper";
 import activityRepository from "@/repositories/activity-repository";
-import enrollmentRepository from "@/repositories/enrollment-repository";
-import ticketRepository from "@/repositories/ticket-repository";
 
 async function getActivities(userId: number, dateFilter: string | undefined) {
   await verifyTicketInformations(userId);
@@ -22,20 +20,21 @@ async function getActivities(userId: number, dateFilter: string | undefined) {
   return activities;
 }
 
-async function verifyTicketInformations(userId: number) {
-  //Tem enrollment?
-  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) throw notFoundError();
+async function createReserveInActivity(userId: number, activityId: number) {
+  const userAlreadyHaveInActivity = await activityRepository.findActivityWithUserIdSeat(userId, activityId);
+  if (userAlreadyHaveInActivity) throw new Error("Already have a seat in activity");
 
-  //Tem ticket pago isOnline false e includesHotel true
-  const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
+  const activity = await activityRepository.findActivityById(activityId);
+  const availableSeats = await activityRepository.getCountOfSeatInActivity(activityId);
 
-  if (!ticket || ticket.status === "RESERVED" || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel)
-    throw cannotListActivitiesError();
+  if (activity.Hall.capacity <= availableSeats._count.id) throw new Error("No available seats in this activity");
+
+  await activityRepository.reserveActivity(userId, activityId);
 }
 
 const activityService = {
   getActivities,
+  createReserveInActivity,
 };
 
 export default activityService;

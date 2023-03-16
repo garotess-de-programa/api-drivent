@@ -16,6 +16,9 @@ export async function getActivitiesDays(req: AuthenticatedRequest, res: Response
     if (error.name === "cannotListActivitiesError") {
       return res.sendStatus(httpStatus.PAYMENT_REQUIRED);
     }
+    if (error.name === "noContentActivitiesDaysError") {
+      return res.sendStatus(httpStatus.NO_CONTENT);
+    }
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 }

@@ -6,7 +6,7 @@ async function findDays() {
       DATE("startTime") as "day",
       COUNT(*) as count
     FROM "Schedule"
-    GROUP BY "startDate";
+    GROUP BY "day";
   `;
 }
 
